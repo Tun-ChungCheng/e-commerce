@@ -21,4 +21,8 @@
         WHERE product_id = #{productId}
     </update>
 
+    <!--    void deleteProductById(Integer productId)    -->
+    <delete id="deleteProductById">
+        DELETE FROM product WHERE product_id = #{productId}
+    </delete>
 </mapper>
