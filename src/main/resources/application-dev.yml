@@ -3,7 +3,10 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_HOST:localhost}:3306/mall?serverTimezone=Asia/Taipei&characterEncoding=utf-8
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/ecommerce?serverTimezone=Asia/Taipei&characterEncoding=utf-8
     username: root
     password: root
     name: E-COMMERCE-DEV-DB
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
