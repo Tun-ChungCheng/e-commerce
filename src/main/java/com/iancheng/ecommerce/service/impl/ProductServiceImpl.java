@@ -26,6 +26,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Integer countProduct(ProductQueryParams queryParams) {
+        return productMapper.countProduct(queryParams);
+    }
+
+    @Override
     public Product getProductById(Integer productId) {
         return productMapper.getProductById(productId);
     }
@@ -68,6 +73,5 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProductById(Integer productId) {
         productMapper.deleteProductById(productId);
     }
-
 
 }

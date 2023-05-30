@@ -11,6 +11,8 @@ public interface ProductMapper {
 
     List<Product> getProducts(ProductQueryParams queryParams);
 
+    Integer countProduct(ProductQueryParams queryParams);
+
     Product getProductById(Integer productId);
 
     void createProduct(Product product);
@@ -18,5 +20,7 @@ public interface ProductMapper {
     void updateProduct(Product product);
 
     void deleteProductById(Integer productId);
+
+
 
 }

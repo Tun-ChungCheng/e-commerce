@@ -10,6 +10,8 @@ public interface ProductService {
 
     List<Product> getProducts(ProductQueryParams queryParams);
 
+    Integer countProduct(ProductQueryParams queryParams);
+
     Product getProductById(Integer productId);
 
     Integer createProduct(ProductRequest productRequest);
@@ -17,5 +19,6 @@ public interface ProductService {
     void updateProduct(Integer productId, ProductRequest productRequest);
 
     void deleteProductById(Integer productId);
+
 
 }

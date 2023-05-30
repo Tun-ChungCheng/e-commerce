@@ -6,14 +6,15 @@
     <!--    List<Product> getProducts(ProductQueryParams queryParams)    -->
     <select id="getProducts" resultType="com.iancheng.ecommerce.model.Product">
         SELECT * FROM product
-        <where>
-            <if test="category != null">
-                AND category = #{category}
-            </if>
-            <if test="search != null">
-                AND (product_name LIKE CONCAT('%', #{search}, '%') OR description LIKE CONCAT('%', #{search}, '%'))
-            </if>
-        </where>
+        <include refid="filtering" />
+        ORDER BY ${orderBy} ${sort}
+        LIMIT ${limit} OFFSET ${offset}
+    </select>
+
+    <!--    Integer countProduct(ProductQueryParams queryParams)    -->
+    <select id="countProduct" resultType="Integer">
+        SELECT COUNT(*) FROM product
+        <include refid="filtering" />
         ORDER BY ${orderBy} ${sort}
         LIMIT ${limit} OFFSET ${offset}
     </select>
@@ -40,4 +41,15 @@
     <delete id="deleteProductById">
         DELETE FROM product WHERE product_id = #{productId}
     </delete>
+
+    <sql id="filtering">
+        <where>
+            <if test="category != null">
+                AND category = #{category}
+            </if>
+            <if test="search != null">
+                AND (product_name LIKE CONCAT('%', #{search}, '%') OR description LIKE CONCAT('%', #{search}, '%'))
+            </if>
+        </where>
+    </sql>
 </mapper>
