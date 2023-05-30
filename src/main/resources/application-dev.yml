@@ -8,5 +8,6 @@ spring:
     password: root
     name: E-COMMERCE-DEV-DB
 mybatis:
+  mapper-locations: classpath:mappers/*.xml
   configuration:
     map-underscore-to-camel-case: true

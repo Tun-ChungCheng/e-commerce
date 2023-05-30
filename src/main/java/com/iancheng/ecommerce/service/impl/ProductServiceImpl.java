@@ -41,4 +41,19 @@ public class ProductServiceImpl implements ProductService {
 
         return product.getProductId();
     }
+
+    @Override
+    public void updateProduct(Integer productId, ProductRequest productRequest) {
+        Product product = new Product();
+        product.setProductId(productId);
+        product.setProductName(productRequest.getProductName());
+        product.setCategory(productRequest.getCategory());
+        product.setImageUrl(productRequest.getImageUrl());
+        product.setPrice(productRequest.getPrice());
+        product.setStock(productRequest.getStock());
+        product.setDescription(productRequest.getDescription());
+        product.setLastModifiedDate(new Date());
+
+        productMapper.updateProduct(product);
+    }
 }
