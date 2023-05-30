@@ -1,6 +1,7 @@
 package com.iancheng.ecommerce.controller;
 
 import com.iancheng.ecommerce.constant.ProductCategory;
+import com.iancheng.ecommerce.dto.ProductQueryParams;
 import com.iancheng.ecommerce.dto.ProductRequest;
 import com.iancheng.ecommerce.model.Product;
 import com.iancheng.ecommerce.service.ProductService;
@@ -25,7 +26,11 @@ public class ProductController {
             @RequestParam(required = false) ProductCategory category,
             @RequestParam(required = false) String search
     ) {
-        List<Product> productList = productService.getProducts(category, search);
+        ProductQueryParams queryParams = new ProductQueryParams();
+        queryParams.setCategory(category);
+        queryParams.setSearch(search);
+
+        List<Product> productList = productService.getProducts(queryParams);
 
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }

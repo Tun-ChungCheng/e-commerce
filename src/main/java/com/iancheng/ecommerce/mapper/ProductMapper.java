@@ -1,6 +1,6 @@
 package com.iancheng.ecommerce.mapper;
 
-import com.iancheng.ecommerce.constant.ProductCategory;
+import com.iancheng.ecommerce.dto.ProductQueryParams;
 import com.iancheng.ecommerce.model.Product;
 import org.apache.ibatis.annotations.*;
 
@@ -17,5 +17,5 @@ public interface ProductMapper {
 
     void deleteProductById(Integer productId);
 
-    List<Product> getProducts(ProductCategory category, String search);
+    List<Product> getProducts(ProductQueryParams queryParams);
 }
