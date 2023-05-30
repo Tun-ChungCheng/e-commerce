@@ -3,6 +3,8 @@ package com.iancheng.ecommerce.mapper;
 import com.iancheng.ecommerce.model.Product;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 @Mapper
 public interface ProductMapper {
 
@@ -13,4 +15,6 @@ public interface ProductMapper {
     void updateProduct(Product product);
 
     void deleteProductById(Integer productId);
+
+    List<Product> getProducts();
 }

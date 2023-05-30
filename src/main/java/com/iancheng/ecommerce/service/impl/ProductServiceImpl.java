@@ -7,6 +7,7 @@ import com.iancheng.ecommerce.service.ProductService;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -17,6 +18,11 @@ public class ProductServiceImpl implements ProductService {
         this.productMapper = productMapper;
     }
 
+
+    @Override
+    public List<Product> getProducts() {
+        return productMapper.getProducts();
+    }
 
     @Override
     public Product getProductById(Integer productId) {
@@ -61,4 +67,6 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProductById(Integer productId) {
         productMapper.deleteProductById(productId);
     }
+
+
 }

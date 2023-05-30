@@ -3,6 +3,8 @@ package com.iancheng.ecommerce.service;
 import com.iancheng.ecommerce.dto.ProductRequest;
 import com.iancheng.ecommerce.model.Product;
 
+import java.util.List;
+
 public interface ProductService {
 
     Product getProductById(Integer productId);
@@ -12,4 +14,6 @@ public interface ProductService {
     void updateProduct(Integer productId, ProductRequest productRequest);
 
     void deleteProductById(Integer productId);
+
+    List<Product> getProducts();
 }
