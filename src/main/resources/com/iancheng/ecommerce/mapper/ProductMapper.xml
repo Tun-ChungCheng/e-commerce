@@ -15,6 +15,7 @@
             </if>
         </where>
         ORDER BY ${orderBy} ${sort}
+        LIMIT ${limit} OFFSET ${offset}
     </select>
 
     <!--    Product getProductById(Integer productId)    -->
