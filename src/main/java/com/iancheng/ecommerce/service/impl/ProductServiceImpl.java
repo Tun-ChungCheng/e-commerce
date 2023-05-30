@@ -1,5 +1,6 @@
 package com.iancheng.ecommerce.service.impl;
 
+import com.iancheng.ecommerce.constant.ProductCategory;
 import com.iancheng.ecommerce.dto.ProductRequest;
 import com.iancheng.ecommerce.mapper.ProductMapper;
 import com.iancheng.ecommerce.model.Product;
@@ -20,8 +21,8 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public List<Product> getProducts() {
-        return productMapper.getProducts();
+    public List<Product> getProducts(ProductCategory category, String search) {
+        return productMapper.getProducts(category, search);
     }
 
     @Override

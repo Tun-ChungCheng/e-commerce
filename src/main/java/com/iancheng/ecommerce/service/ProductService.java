@@ -1,5 +1,6 @@
 package com.iancheng.ecommerce.service;
 
+import com.iancheng.ecommerce.constant.ProductCategory;
 import com.iancheng.ecommerce.dto.ProductRequest;
 import com.iancheng.ecommerce.model.Product;
 
@@ -15,5 +16,5 @@ public interface ProductService {
 
     void deleteProductById(Integer productId);
 
-    List<Product> getProducts();
+    List<Product> getProducts(ProductCategory category, String search);
 }
