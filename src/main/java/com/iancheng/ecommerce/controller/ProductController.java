@@ -1,14 +1,15 @@
 package com.iancheng.ecommerce.controller;
 
+import com.iancheng.ecommerce.dto.ProductRequest;
 import com.iancheng.ecommerce.model.Product;
 import com.iancheng.ecommerce.service.ProductService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ProductController {
+
     private final ProductService productService;
 
     public ProductController(ProductService productService) {
@@ -20,9 +21,18 @@ public class ProductController {
         Product product = productService.getProductById(productId);
 
         if (product != null) {
-            return ResponseEntity.ok().body(product);
+            return ResponseEntity.status(HttpStatus.OK).body(product);
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @PostMapping("/products")
+    public ResponseEntity<Product> createProduct(@RequestBody ProductRequest productRequest) {
+        Integer productId = productService.createProduct(productRequest);
+
+        Product product = productService.getProductById(productId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 }
