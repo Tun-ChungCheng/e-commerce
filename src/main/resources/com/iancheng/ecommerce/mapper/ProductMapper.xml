@@ -5,7 +5,7 @@
 <mapper namespace="com.iancheng.ecommerce.mapper.ProductMapper">
     <!--    List<Product> getProducts(ProductQueryParams queryParams)    -->
     <select id="getProducts" resultType="com.iancheng.ecommerce.model.Product">
-        SELECT * FROM product
+        SELECT * FROM product WHERE 1=1
         <include refid="filtering" />
         ORDER BY ${orderBy} ${sort}
         LIMIT ${limit} OFFSET ${offset}
@@ -13,10 +13,8 @@
 
     <!--    Integer countProduct(ProductQueryParams queryParams)    -->
     <select id="countProduct" resultType="Integer">
-        SELECT COUNT(*) FROM product
+        SELECT count(*) FROM product WHERE 1=1
         <include refid="filtering" />
-        ORDER BY ${orderBy} ${sort}
-        LIMIT ${limit} OFFSET ${offset}
     </select>
 
     <!--    Product getProductById(Integer productId)    -->
@@ -43,13 +41,12 @@
     </delete>
 
     <sql id="filtering">
-        <where>
-            <if test="category != null">
-                AND category = #{category}
-            </if>
-            <if test="search != null">
-                AND (product_name LIKE CONCAT('%', #{search}, '%') OR description LIKE CONCAT('%', #{search}, '%'))
-            </if>
-        </where>
+        <if test="category != null">
+            AND category = #{category}
+        </if>
+        <if test="search != null">
+            AND (product_name LIKE CONCAT('%', #{search}, '%') OR description LIKE CONCAT('%', #{search}, '%'))
+        </if>
     </sql>
+
 </mapper>
