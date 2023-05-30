@@ -9,6 +9,8 @@ import java.util.List;
 @Mapper
 public interface ProductMapper {
 
+    List<Product> getProducts(ProductQueryParams queryParams);
+
     Product getProductById(Integer productId);
 
     void createProduct(Product product);
@@ -17,5 +19,4 @@ public interface ProductMapper {
 
     void deleteProductById(Integer productId);
 
-    List<Product> getProducts(ProductQueryParams queryParams);
 }

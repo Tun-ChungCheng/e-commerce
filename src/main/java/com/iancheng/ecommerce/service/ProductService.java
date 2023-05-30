@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface ProductService {
 
+    List<Product> getProducts(ProductQueryParams queryParams);
+
     Product getProductById(Integer productId);
 
     Integer createProduct(ProductRequest productRequest);
@@ -16,5 +18,4 @@ public interface ProductService {
 
     void deleteProductById(Integer productId);
 
-    List<Product> getProducts(ProductQueryParams queryParams);
 }
