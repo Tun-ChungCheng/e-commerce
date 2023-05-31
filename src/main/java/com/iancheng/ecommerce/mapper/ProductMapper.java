@@ -8,7 +8,6 @@ import java.util.List;
 
 @Mapper
 public interface ProductMapper {
-
     List<Product> getProducts(ProductQueryParams queryParams);
 
     Integer countProduct(ProductQueryParams queryParams);
