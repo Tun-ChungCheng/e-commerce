@@ -13,4 +13,9 @@
     <select id="getUserById" resultType="com.iancheng.ecommerce.model.User">
         SELECT * FROM user WHERE user_id = #{userId}
     </select>
+
+    <!--    User getUserByEmail(String email)    -->
+    <select id="getUserByEmail" resultType="com.iancheng.ecommerce.model.User">
+        SELECT * FROM user WHERE email = #{email}
+    </select>
 </mapper>

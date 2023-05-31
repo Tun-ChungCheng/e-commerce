@@ -4,12 +4,17 @@ import com.iancheng.ecommerce.dto.UserRegisterRequest;
 import com.iancheng.ecommerce.mapper.UserMapper;
 import com.iancheng.ecommerce.model.User;
 import com.iancheng.ecommerce.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 
 @Service
 public class UserServiceImpl implements UserService {
+    private final static Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserMapper userMapper;
 
     public UserServiceImpl(UserMapper userMapper) {
@@ -19,6 +24,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer register(UserRegisterRequest request) {
+        // 檢查註冊的 email
+        checkEmail(request);
+
+        // 創建帳號
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
@@ -35,5 +44,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Integer userId) {
         return userMapper.getUserById(userId);
+    }
+
+    private void checkEmail(UserRegisterRequest request) {
+        if (userExist(request)) {
+            log.warn("該 email {} 已經被註冊", request.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private boolean userExist(UserRegisterRequest request) {
+        return userMapper.getUserByEmail(request.getEmail()) != null;
     }
 }
