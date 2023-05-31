@@ -8,4 +8,10 @@
         INSERT INTO `order`(user_id, total_amount, created_date, last_modified_date)
         VALUES(#{userId}, #{totalAmount}, #{createdDate}, #{lastModifiedDate})
     </insert>
+
+    <!--    Order getOrderById(Integer orderId)    -->
+    <select id="getOrderById" resultType="com.iancheng.ecommerce.model.Order">
+        SELECT * FROM `order` WHERE order_id = #{orderId}
+    </select>
+
 </mapper>

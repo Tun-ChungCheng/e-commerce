@@ -10,4 +10,21 @@
             (#{orderId}, #{orderItem.productId}, #{orderItem.quantity}, #{orderItem.amount})
         </foreach>
     </insert>
+
+    <!--    List<OrderItem> getOrderItemsByOrderId(Integer orderId)    -->
+    <select id="getOrderItemsByOrderId" resultMap="orderItemResultMap">
+        SELECT oi.order_item_id, oi.order_id, oi.product_id, oi.quantity, oi.amount, p.product_name, p.image_url
+        FROM order_item oi LEFT JOIN product p ON oi.product_id = p.product_id
+        WHERE oi.order_id = #{orderId}
+    </select>
+
+    <resultMap id="orderItemResultMap" type="com.iancheng.ecommerce.model.OrderItem">
+        <id property="orderItemId" column="order_item_id" />
+        <result property="orderId" column="order_id" />
+        <result property="productId" column="product_id" />
+        <result property="quantity" column="quantity" />
+        <result property="amount" column="amount" />
+        <result property="productName" column="product_name" />
+        <result property="imageUrl" column="image_url" />
+    </resultMap>
 </mapper>

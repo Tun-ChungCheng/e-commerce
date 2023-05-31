@@ -1,6 +1,7 @@
 package com.iancheng.ecommerce.controller;
 
 import com.iancheng.ecommerce.dto.CreateOrderRequest;
+import com.iancheng.ecommerce.model.Order;
 import com.iancheng.ecommerce.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,8 @@ public class OrderController {
     ) {
         Integer orderId = orderService.createOrder(userId, request);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderId);
+        Order order = orderService.getOrderById(orderId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 }

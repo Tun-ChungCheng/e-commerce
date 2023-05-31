@@ -10,6 +10,7 @@ import com.iancheng.ecommerce.model.OrderItem;
 import com.iancheng.ecommerce.model.Product;
 import com.iancheng.ecommerce.service.OrderService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +30,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    @Transactional
     @Override
     public Integer createOrder(Integer userId, CreateOrderRequest request) {
         int totalAmount = 0;
@@ -64,5 +66,16 @@ public class OrderServiceImpl implements OrderService {
         orderItemMapper.createOrderItems(order.getOrderId(), orderItemList);
 
         return order.getOrderId();
+    }
+
+    @Override
+    public Order getOrderById(Integer orderId) {
+        Order order = orderMapper.getOrderById(orderId);
+
+        List<OrderItem> orderItemList = orderItemMapper.getOrderItemsByOrderId(orderId);
+
+        order.setOrderItemList(orderItemList);
+
+        return order;
     }
 }
