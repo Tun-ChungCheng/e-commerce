@@ -1,5 +1,6 @@
 package com.iancheng.ecommerce.controller;
 
+import com.iancheng.ecommerce.dto.UserLoginRequest;
 import com.iancheng.ecommerce.dto.UserRegisterRequest;
 import com.iancheng.ecommerce.model.User;
 import com.iancheng.ecommerce.service.UserService;
@@ -26,5 +27,12 @@ public class UserController {
         User user = userService.getUserById(userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+
+    @PostMapping("/users/login")
+    public ResponseEntity<User> login(@RequestBody @Valid UserLoginRequest request) {
+        User user = userService.login(request);
+
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 }
