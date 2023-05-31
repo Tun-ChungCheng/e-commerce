@@ -3,15 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.iancheng.ecommerce.mapper.ProductMapper">
-    <!--    List<Product> getProducts(ProductQueryParams queryParams)    -->
+    <!--    List<Product> getProducts(ProductQueryParams productQueryParams)    -->
     <select id="getProducts" resultType="com.iancheng.ecommerce.model.Product">
         SELECT * FROM product WHERE 1=1
         <include refid="filtering" />
-        ORDER BY ${orderBy} ${sort}
-        LIMIT ${limit} OFFSET ${offset}
+        ORDER BY ${orderBy} ${sort} LIMIT ${limit} OFFSET ${offset}
     </select>
 
-    <!--    Integer countProduct(ProductQueryParams queryParams)    -->
+    <!--    Integer countProduct(ProductQueryParams productQueryParams)    -->
     <select id="countProduct" resultType="Integer">
         SELECT count(*) FROM product WHERE 1=1
         <include refid="filtering" />

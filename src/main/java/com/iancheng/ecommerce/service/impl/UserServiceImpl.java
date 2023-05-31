@@ -25,16 +25,16 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Integer register(UserRegisterRequest request) {
+    public Integer register(UserRegisterRequest userRegisterRequest) {
         // 檢查註冊的 email
-        checkRegisterEmail(request);
+        checkRegisterEmail(userRegisterRequest);
 
         // 創建帳號
         User user = new User();
-        user.setEmail(request.getEmail());
+        user.setEmail(userRegisterRequest.getEmail());
 
         // 使用 MD5 生成密碼的雜湊值
-        String hashedPassword = DigestUtils.md5DigestAsHex(request.getPassword().getBytes());
+        String hashedPassword = DigestUtils.md5DigestAsHex(userRegisterRequest.getPassword().getBytes());
         user.setPassword(hashedPassword);
 
         Date now = new Date();
@@ -52,37 +52,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User login(UserLoginRequest request) {
+    public User login(UserLoginRequest userLoginRequest) {
         // 檢查 user 是否存在
-        checkLoginEmail(request);
+        checkLoginEmail(userLoginRequest);
 
-        checkLoginPassword(request);
+        checkLoginPassword(userLoginRequest);
 
-        return userMapper.getUserByEmail(request.getEmail());
+        return userMapper.getUserByEmail(userLoginRequest.getEmail());
     }
 
-    private void checkRegisterEmail(UserRegisterRequest request) {
-        if (userExist(request.getEmail())) {
-            log.warn("該 email {} 已經被註冊", request.getEmail());
+    private void checkRegisterEmail(UserRegisterRequest userRegisterRequest) {
+        if (userExist(userRegisterRequest.getEmail())) {
+            log.warn("該 email {} 已經被註冊", userRegisterRequest.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
 
-    private void checkLoginEmail(UserLoginRequest request) {
-        if (!userExist(request.getEmail())) {
-            log.warn("該 email {} 尚未註冊", request.getEmail());
+    private void checkLoginEmail(UserLoginRequest userLoginRequest) {
+        if (!userExist(userLoginRequest.getEmail())) {
+            log.warn("該 email {} 尚未註冊", userLoginRequest.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
 
-    private void checkLoginPassword(UserLoginRequest request) {
-        User user = userMapper.getUserByEmail(request.getEmail());
+    private void checkLoginPassword(UserLoginRequest userLoginRequest) {
+        User user = userMapper.getUserByEmail(userLoginRequest.getEmail());
         // 使用 MD5 生成密碼的雜湊值
-        String hashedPassword = DigestUtils.md5DigestAsHex(request.getPassword().getBytes());
+        String hashedPassword = DigestUtils.md5DigestAsHex(userLoginRequest.getPassword().getBytes());
 
         // 比較密碼
         if (!comparePassword(hashedPassword, user.getPassword())) {
-            log.warn("email {} 的密碼不正確", request.getEmail());
+            log.warn("email {} 的密碼不正確", userLoginRequest.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
@@ -94,6 +94,5 @@ public class UserServiceImpl implements UserService {
     private boolean comparePassword(String inputPassword, String storedPassword) {
         return inputPassword.equals(storedPassword);
     }
-
 
 }

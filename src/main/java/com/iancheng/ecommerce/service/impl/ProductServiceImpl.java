@@ -20,13 +20,13 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public List<Product> getProducts(ProductQueryParams queryParams) {
-        return productMapper.getProducts(queryParams);
+    public List<Product> getProducts(ProductQueryParams productQueryParams) {
+        return productMapper.getProducts(productQueryParams);
     }
 
     @Override
-    public Integer countProduct(ProductQueryParams queryParams) {
-        return productMapper.countProduct(queryParams);
+    public Integer countProduct(ProductQueryParams productQueryParams) {
+        return productMapper.countProduct(productQueryParams);
     }
 
     @Override

@@ -9,9 +9,9 @@ import java.util.List;
 
 @Mapper
 public interface ProductMapper {
-    List<Product> getProducts(ProductQueryParams queryParams);
+    List<Product> getProducts(ProductQueryParams productQueryParams);
 
-    Integer countProduct(ProductQueryParams queryParams);
+    Integer countProduct(ProductQueryParams productQueryParams);
 
     Product getProductById(Integer productId);
 

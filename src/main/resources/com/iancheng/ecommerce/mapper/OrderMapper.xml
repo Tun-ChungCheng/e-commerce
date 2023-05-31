@@ -3,6 +3,16 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.iancheng.ecommerce.mapper.OrderMapper">
+    <!--    List<Order> getOrders(OrderQueryParams orderQueryParams)    -->
+    <select id="getOrders" resultType="com.iancheng.ecommerce.model.Order">
+        SELECT * FROM `order` WHERE user_id = #{userId} ORDER BY created_date DESC LIMIT ${limit} OFFSET ${offset}
+    </select>
+
+    <!--    Integer countOrder(OrderQueryParams orderQueryParams)    -->
+    <select id="countOrder" resultType="Integer">
+        SELECT count(*) FROM `order` WHERE user_id = #{userId}
+    </select>
+
     <!--    void createOrder(Order order)    -->
     <insert id="createOrder" useGeneratedKeys="true" keyProperty="orderId">
         INSERT INTO `order`(user_id, total_amount, created_date, last_modified_date)

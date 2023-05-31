@@ -2,6 +2,7 @@ package com.iancheng.ecommerce.service.impl;
 
 import com.iancheng.ecommerce.dto.BuyItem;
 import com.iancheng.ecommerce.dto.CreateOrderRequest;
+import com.iancheng.ecommerce.dto.OrderQueryParams;
 import com.iancheng.ecommerce.mapper.OrderItemMapper;
 import com.iancheng.ecommerce.mapper.OrderMapper;
 import com.iancheng.ecommerce.mapper.ProductMapper;
@@ -36,16 +37,34 @@ public class OrderServiceImpl implements OrderService {
         this.userMapper = userMapper;
     }
 
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+        List<Order> orderList = orderMapper.getOrders(orderQueryParams);
+
+        for (Order order : orderList) {
+            List<OrderItem> orderItemList = orderItemMapper.getOrderItemsByOrderId(order.getOrderId());
+
+            order.setOrderItemList(orderItemList);
+        }
+
+        return orderList;
+    }
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        return orderMapper.countOrder(orderQueryParams);
+    }
+
     @Transactional
     @Override
-    public Integer createOrder(Integer userId, CreateOrderRequest request) {
+    public Integer createOrder(Integer userId, CreateOrderRequest createOrderRequest) {
         // 檢查 user 是否存在
         checkUser(userId);
 
         int totalAmount = 0;
         List<OrderItem> orderItemList = new ArrayList<>();
 
-        for (BuyItem buyItem : request.getBuyItemList()) {
+        for (BuyItem buyItem : createOrderRequest.getBuyItemList()) {
             Product product = productMapper.getProductById(buyItem.getProductId());
             
             // 檢查 product 是否存在、庫存是否足夠
@@ -83,17 +102,6 @@ public class OrderServiceImpl implements OrderService {
         return order.getOrderId();
     }
 
-    private void checkProduct(Product product, BuyItem buyItem) {
-        if (product == null) {
-            log.warn("商品 {} 不存在", buyItem.getProductId());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        } else if (product.getStock() < buyItem.getQuantity()) {
-            log.warn("商品 {} 庫存數量不足，無法購買。剩餘庫存 {}，欲購買數量 {}",
-                    buyItem.getProductId(), product.getStock(), buyItem.getQuantity());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-    }
-
     @Override
     public Order getOrderById(Integer orderId) {
         Order order = orderMapper.getOrderById(orderId);
@@ -115,4 +123,16 @@ public class OrderServiceImpl implements OrderService {
     private boolean userExist(Integer userId) {
         return userMapper.getUserById(userId) != null;
     }
+
+    private void checkProduct(Product product, BuyItem buyItem) {
+        if (product == null) {
+            log.warn("商品 {} 不存在", buyItem.getProductId());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        } else if (product.getStock() < buyItem.getQuantity()) {
+            log.warn("商品 {} 庫存數量不足，無法購買。剩餘庫存 {}，欲購買數量 {}",
+                    buyItem.getProductId(), product.getStock(), buyItem.getQuantity());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

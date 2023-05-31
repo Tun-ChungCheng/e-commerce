@@ -5,9 +5,9 @@ import com.iancheng.ecommerce.dto.UserRegisterRequest;
 import com.iancheng.ecommerce.model.User;
 
 public interface UserService {
-    Integer register(UserRegisterRequest request);
+    Integer register(UserRegisterRequest userRegisterRequest);
 
     User getUserById(Integer userId);
 
-    User login(UserLoginRequest request);
+    User login(UserLoginRequest userLoginRequest);
 }
