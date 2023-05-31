@@ -5,17 +5,17 @@
 <mapper namespace="com.iancheng.ecommerce.mapper.UserMapper">
     <!--    void createUser(User user)    -->
     <insert id="createUser" useGeneratedKeys="true" keyProperty="userId">
-        INSERT INTO User(email, password, created_date, last_modified_date)
+        INSERT INTO `user`(email, password, created_date, last_modified_date)
         VALUES(#{email}, #{password}, #{createdDate}, #{lastModifiedDate})
     </insert>
 
     <!--    User getUserById(Integer userId)    -->
     <select id="getUserById" resultType="com.iancheng.ecommerce.model.User">
-        SELECT * FROM user WHERE user_id = #{userId}
+        SELECT * FROM `user` WHERE user_id = #{userId}
     </select>
 
     <!--    User getUserByEmail(String email)    -->
     <select id="getUserByEmail" resultType="com.iancheng.ecommerce.model.User">
-        SELECT * FROM user WHERE email = #{email}
+        SELECT * FROM `user` WHERE email = #{email}
     </select>
 </mapper>

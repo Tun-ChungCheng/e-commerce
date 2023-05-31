@@ -7,7 +7,6 @@ import com.iancheng.ecommerce.model.Product;
 import java.util.List;
 
 public interface ProductService {
-
     List<Product> getProducts(ProductQueryParams queryParams);
 
     Integer countProduct(ProductQueryParams queryParams);
