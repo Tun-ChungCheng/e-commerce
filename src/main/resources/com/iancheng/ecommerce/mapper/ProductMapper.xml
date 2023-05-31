@@ -35,6 +35,11 @@
         WHERE product_id = #{productId}
     </update>
 
+    <!--    void updateStock(Integer productId, Integer stock, Date now)    -->
+    <update id="updateStock">
+        UPDATE product SET stock = #{stock}, last_modified_date = #{now} WHERE product_id = #{productId}
+    </update>
+
     <!--    void deleteProductById(Integer productId)    -->
     <delete id="deleteProductById">
         DELETE FROM product WHERE product_id = #{productId}
