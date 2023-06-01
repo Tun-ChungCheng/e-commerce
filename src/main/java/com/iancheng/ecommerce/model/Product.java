@@ -2,15 +2,15 @@ package com.iancheng.ecommerce.model;
 
 import com.iancheng.ecommerce.constant.ProductCategory;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Product {
-
     private Integer productId;
     private String productName;
     private ProductCategory category;
     private String imageUrl;
-    private Integer price;
+    private BigDecimal price;
     private Integer stock;
     private String description;
     private Date createdDate;
@@ -48,11 +48,11 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public Integer getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

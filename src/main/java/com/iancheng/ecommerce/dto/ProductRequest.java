@@ -3,6 +3,7 @@ package com.iancheng.ecommerce.dto;
 import com.iancheng.ecommerce.constant.ProductCategory;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 public class ProductRequest {
     @NotNull
@@ -15,7 +16,7 @@ public class ProductRequest {
     private String imageUrl;
 
     @NotNull
-    private Integer price;
+    private BigDecimal price;
 
     @NotNull
     private Integer stock;
@@ -46,11 +47,11 @@ public class ProductRequest {
         this.imageUrl = imageUrl;
     }
 
-    public Integer getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

@@ -1,12 +1,13 @@
 package com.iancheng.ecommerce.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 public class Order {
     private Integer orderId;
     private Integer userId;
-    private Integer totalAmount;
+    private BigDecimal totalAmount;
     private Date createdDate;
     private Date lastModifiedDate;
     private List<OrderItem> orderItemList;
@@ -27,11 +28,11 @@ public class Order {
         this.userId = userId;
     }
 
-    public Integer getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(Integer totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 

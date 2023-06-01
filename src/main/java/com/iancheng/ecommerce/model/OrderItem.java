@@ -1,11 +1,13 @@
 package com.iancheng.ecommerce.model;
 
+import java.math.BigDecimal;
+
 public class OrderItem {
     private Integer orderItemId;
     private Integer orderId;
     private Integer productId;
     private Integer quantity;
-    private Integer amount;
+    private BigDecimal amount;
     private String productName;
     private String imageUrl;
 
@@ -41,11 +43,11 @@ public class OrderItem {
         this.quantity = quantity;
     }
 
-    public Integer getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

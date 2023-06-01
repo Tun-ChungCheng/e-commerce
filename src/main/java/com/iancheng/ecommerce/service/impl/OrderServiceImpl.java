@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -61,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
         // 檢查 user 是否存在
         checkUser(userId);
 
-        int totalAmount = 0;
+        BigDecimal totalAmount = new BigDecimal("0");
         List<OrderItem> orderItemList = new ArrayList<>();
 
         for (BuyItem buyItem : createOrderRequest.getBuyItemList()) {
@@ -74,8 +75,8 @@ public class OrderServiceImpl implements OrderService {
             productMapper.updateStock(product.getProductId(), product.getStock() - buyItem.getQuantity(), new Date());
 
             // 計算總價錢
-            int amount = product.getPrice() * buyItem.getQuantity();
-            totalAmount += amount;
+            BigDecimal amount = product.getPrice().multiply(BigDecimal.valueOf(buyItem.getQuantity()));
+            totalAmount = totalAmount.add(amount);
 
             // 轉換 BuyItem to OrderItem
             OrderItem orderItem = new OrderItem();
