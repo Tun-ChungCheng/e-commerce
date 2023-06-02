@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -58,6 +59,7 @@ public class ProductControllerTest {
     }
 
     // 創建商品
+    @WithMockUser(roles = {"ADMIN"})
     @Transactional
     @Test
     public void createProduct_success() throws Exception {
@@ -87,6 +89,7 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.lastModifiedDate", notNullValue()));
     }
 
+    @WithMockUser(roles = {"ADMIN"})
     @Transactional
     @Test
     public void createProduct_illegalArgument() throws Exception {
@@ -105,6 +108,7 @@ public class ProductControllerTest {
     }
 
     // 更新商品
+    @WithMockUser(roles = {"ADMIN"})
     @Transactional
     @Test
     public void updateProduct_success() throws Exception {
@@ -134,6 +138,7 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.lastModifiedDate", notNullValue()));
     }
 
+    @WithMockUser(roles = {"ADMIN"})
     @Transactional
     @Test
     public void updateProduct_illegalArgument() throws Exception {
@@ -152,6 +157,7 @@ public class ProductControllerTest {
 
     }
 
+    @WithMockUser(roles = {"ADMIN"})
     @Transactional
     @Test
     public void updateProduct_productNotFound() throws Exception {
@@ -174,6 +180,7 @@ public class ProductControllerTest {
     }
 
     // 刪除商品
+    @WithMockUser(roles = {"ADMIN"})
     @Transactional
     @Test
     public void deleteProduct_success() throws Exception {
@@ -184,6 +191,7 @@ public class ProductControllerTest {
                 .andExpect(status().is(204));
     }
 
+    @WithMockUser(roles = {"ADMIN"})
     @Transactional
     @Test
     public void deleteProduct_deleteNonExistingProduct() throws Exception {
