@@ -1,5 +1,5 @@
 # Fetching 1.8 version of Java
-FROM openjdk:1.8
+FROM openjdk:8
 
 # Setting up work directory
 WORKDIR /app
