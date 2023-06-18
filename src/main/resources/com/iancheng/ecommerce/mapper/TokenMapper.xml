@@ -5,10 +5,10 @@
 <mapper namespace="com.iancheng.ecommerce.mapper.TokenMapper">
     <!--    List<Token> getValidTokensByUserId(Integer userId)   -->
     <select id="getValidTokensByUserId" resultType="com.iancheng.ecommerce.model.Token">
-        SELECT t.token_id, t.jwt, t.token_type,
-               t.expired, t.revoked
+        SELECT t.token_id, t.user_id, t.jwt,
+               t.token_type, t.expired, t.revoked
           FROM token t
-         INNER JOIN user u ON t.user_id = u.user_id
+         INNER JOIN `user` u ON t.user_id = u.user_id
          WHERE u.user_id = #{userId}
            AND (t.expired = false OR t.revoked = false)
     </select>
@@ -16,17 +16,17 @@
     <!--    Token getTokenByJwt(String jwt)    -->
     <select id="getTokenByJwt" resultType="com.iancheng.ecommerce.model.Token">
         SELECT token_id, user_id, jwt,
-        token_type, expired, revoked
-        FROM token
-        WHERE jwt = #{jwt}
+               token_type, expired, revoked
+          FROM token
+         WHERE jwt = #{jwt}
     </select>
 
     <!--    void createToken(Token token)    -->
     <insert id="createToken">
-        INSERT INTO token (token_id, user_id, jwt,
-                           token_type, expired, revoked)
-        VALUES (#{tokenId}, #{userId}, #{jwt},
-                #{tokenType}, #{expired}, #{revoked})
+        INSERT INTO token (user_id, jwt, token_type,
+                           expired, revoked)
+        VALUES (#{userId}, #{jwt}, #{tokenType},
+                #{expired}, #{revoked})
     </insert>
 
     <!--    void updateTokens(List<Token> tokens)    -->

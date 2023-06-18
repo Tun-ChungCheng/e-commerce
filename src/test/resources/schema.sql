@@ -38,3 +38,13 @@ CREATE TABLE IF NOT EXISTS order_item
     quantity      INT     NOT NULL, -- 商品數量
     amount        DECIMAL NOT NULL  -- 商品花費
 );
+
+CREATE TABLE IF NOT EXISTS token
+(
+    token_id   INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    jwt        VARCHAR(256) NOT NULL UNIQUE,
+    token_type VARCHAR(32)  NOT NULL,
+    expired    BOOLEAN      NOT NULL,
+    revoked    BOOLEAN      NOT NULL,
+    user_id    INT          NOT NULL
+);

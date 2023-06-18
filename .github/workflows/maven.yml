@@ -27,14 +27,16 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '1.8'
-          distribution: 'adopt'
+          distribution: 'corretto'
           cache: maven
 
       - name: Run unit tests
         run: mvn -B test --file pom.xml
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: |
+          mvn clean
+          mvn -B package --file pom.xml
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       - name: Update dependency graph
