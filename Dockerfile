@@ -5,10 +5,10 @@ FROM openjdk:8
 WORKDIR /app
 
 # Copy the jar file into our app
-COPY ./target/spring-0.0.1-SNAPSHOT.jar /app
+COPY ./target/e-commerce-docker.jar /app
 
 # Exposing port 8080
 EXPOSE 8080
 
 # Starting the application
-CMD ["java", "-jar", "spring-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "e-commerce-docker.jar"]

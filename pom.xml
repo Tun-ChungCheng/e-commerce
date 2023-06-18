@@ -96,6 +96,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <finalName>e-commerce-docker</finalName>
     </build>
 
 </project>
