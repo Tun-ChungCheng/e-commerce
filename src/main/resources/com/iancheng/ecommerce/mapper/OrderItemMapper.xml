@@ -5,17 +5,22 @@
 <mapper namespace="com.iancheng.ecommerce.mapper.OrderItemMapper">
     <!--    void createOrderItems(Integer orderId, List<OrderItem> orderItemList)    -->
     <insert id="createOrderItems">
-        INSERT INTO order_item(order_id, product_id, quantity, amount) VALUES
+        INSERT INTO order_item (order_id, product_id, quantity,
+                               amount)
+        VALUES
         <foreach collection="orderItemList" item="orderItem" separator=",">
-            (#{orderId}, #{orderItem.productId}, #{orderItem.quantity}, #{orderItem.amount})
+               (#{orderId}, #{orderItem.productId}, #{orderItem.quantity},
+                #{orderItem.amount})
         </foreach>
     </insert>
 
     <!--    List<OrderItem> getOrderItemsByOrderId(Integer orderId)    -->
     <select id="getOrderItemsByOrderId" resultType="com.iancheng.ecommerce.model.OrderItem">
-        SELECT oi.order_item_id, oi.order_id, oi.product_id, oi.quantity, oi.amount, p.product_name, p.image_url
-        FROM order_item oi LEFT JOIN product p ON oi.product_id = p.product_id
-        WHERE oi.order_id = #{orderId}
+        SELECT oi.order_item_id, oi.order_id, oi.product_id,
+               oi.quantity, oi.amount, p.product_name,
+               p.image_url
+          FROM order_item oi LEFT JOIN product p ON oi.product_id = p.product_id
+         WHERE oi.order_id = #{orderId}
     </select>
 
 </mapper>

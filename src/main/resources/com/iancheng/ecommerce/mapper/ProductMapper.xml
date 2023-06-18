@@ -5,51 +5,70 @@
 <mapper namespace="com.iancheng.ecommerce.mapper.ProductMapper">
     <!--    List<Product> getProducts(ProductQueryParams productQueryParams)    -->
     <select id="getProducts" resultType="com.iancheng.ecommerce.model.Product">
-        SELECT * FROM product WHERE 1=1
+        SELECT product_id, product_name, category,
+               image_url, price, stock,
+               description, created_date, last_modified_date
+          FROM product
+         WHERE 1=1
         <include refid="filtering" />
-        ORDER BY ${orderBy} ${sort} LIMIT ${limit} OFFSET ${offset}
+         ORDER BY ${orderBy} ${sort}
+         LIMIT ${limit} OFFSET ${offset}
     </select>
 
     <!--    Integer countProduct(ProductQueryParams productQueryParams)    -->
     <select id="countProduct" resultType="Integer">
-        SELECT count(*) FROM product WHERE 1=1
+        SELECT count(*)
+          FROM product
+         WHERE 1=1
         <include refid="filtering" />
     </select>
 
     <!--    Product getProductById(Integer productId)    -->
     <select id="getProductById" resultType="com.iancheng.ecommerce.model.Product">
-        SELECT * FROM product WHERE product_id = #{productId}
+        SELECT product_id, product_name, category,
+               image_url, price, stock,
+               description, created_date, last_modified_date
+          FROM product
+         WHERE product_id = #{productId}
     </select>
 
     <!--    void createProduct(Product product)    -->
     <insert id="createProduct" useGeneratedKeys="true" keyProperty="productId">
-        INSERT INTO product(product_name, category, image_url, price, stock, description, created_date, last_modified_date)
-        VALUES (#{productName}, #{category}, #{imageUrl}, #{price}, #{stock}, #{description}, #{createdDate}, #{lastModifiedDate})
+        INSERT INTO product(product_name, category, image_url,
+                            price, stock, description,
+                            created_date, last_modified_date)
+        VALUES (#{productName}, #{category}, #{imageUrl},
+                #{price}, #{stock}, #{description},
+                #{createdDate}, #{lastModifiedDate})
     </insert>
 
     <!--    void updateProduct(Product product)    -->
     <update id="updateProduct">
         UPDATE product SET product_name = #{productName}, category = #{category}, image_url = #{imageUrl},
-        price = #{price}, stock = #{stock}, description = #{description}, last_modified_date = #{lastModifiedDate}
-        WHERE product_id = #{productId}
+                           price = #{price}, stock = #{stock}, description = #{description},
+                           last_modified_date = #{lastModifiedDate}
+         WHERE product_id = #{productId}
     </update>
 
     <!--    void updateStock(Integer productId, Integer stock, Date now)    -->
     <update id="updateStock">
-        UPDATE product SET stock = #{stock}, last_modified_date = #{now} WHERE product_id = #{productId}
+        UPDATE product SET stock = #{stock}, last_modified_date = #{now}
+         WHERE product_id = #{productId}
     </update>
 
     <!--    void deleteProductById(Integer productId)    -->
     <delete id="deleteProductById">
-        DELETE FROM product WHERE product_id = #{productId}
+        DELETE FROM product
+         WHERE product_id = #{productId}
     </delete>
 
     <sql id="filtering">
         <if test="category != null">
-            AND category = #{category}
+           AND category = #{category}
         </if>
         <if test="search != null">
-            AND (product_name LIKE CONCAT('%', #{search}, '%') OR description LIKE CONCAT('%', #{search}, '%'))
+           AND (product_name LIKE CONCAT('%', #{search}, '%') OR
+                 description LIKE CONCAT('%', #{search}, '%'))
         </if>
     </sql>
 

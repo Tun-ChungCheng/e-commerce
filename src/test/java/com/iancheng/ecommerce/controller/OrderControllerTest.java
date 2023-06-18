@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -31,6 +32,7 @@ public class OrderControllerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     // 創建訂單
+    @WithMockUser(authorities = {"MEMBER"})
     @Transactional
     @Test
     public void createOrder_success() throws Exception {
@@ -66,6 +68,7 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.lastModifiedDate", notNullValue()));
     }
 
+    @WithMockUser(authorities = {"MEMBER"})
     @Transactional
     @Test
     public void createOrder_illegalArgument_emptyBuyItemList() throws Exception {
@@ -84,6 +87,7 @@ public class OrderControllerTest {
                 .andExpect(status().is(400));
     }
 
+    @WithMockUser(authorities = {"MEMBER"})
     @Transactional
     @Test
     public void createOrder_userNotExist() throws Exception {
@@ -108,6 +112,7 @@ public class OrderControllerTest {
                 .andExpect(status().is(400));
     }
 
+    @WithMockUser(authorities = {"MEMBER"})
     @Transactional
     @Test
     public void createOrder_productNotExist() throws Exception {
@@ -132,6 +137,7 @@ public class OrderControllerTest {
                 .andExpect(status().is(400));
     }
 
+    @WithMockUser(authorities = {"MEMBER"})
     @Transactional
     @Test
     public void createOrder_stockNotEnough() throws Exception {
@@ -157,6 +163,7 @@ public class OrderControllerTest {
     }
 
     // 查詢訂單列表
+    @WithMockUser(authorities = {"MEMBER"})
     @Test
     public void getOrders() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -182,6 +189,7 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.results[1].lastModifiedDate", notNullValue()));
     }
 
+    @WithMockUser(authorities = {"MEMBER"})
     @Test
     public void getOrders_pagination() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -197,6 +205,7 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.results", hasSize(0)));
     }
 
+    @WithMockUser(authorities = {"MEMBER"})
     @Test
     public void getOrders_userHasNoOrder() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -210,6 +219,7 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.results", hasSize(0)));
     }
 
+    @WithMockUser(authorities = {"MEMBER"})
     @Test
     public void getOrders_userNotExist() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders

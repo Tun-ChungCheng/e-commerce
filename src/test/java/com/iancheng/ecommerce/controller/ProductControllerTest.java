@@ -59,7 +59,7 @@ public class ProductControllerTest {
     }
 
     // 創建商品
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     @Transactional
     @Test
     public void createProduct_success() throws Exception {
@@ -89,7 +89,7 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.lastModifiedDate", notNullValue()));
     }
 
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     @Transactional
     @Test
     public void createProduct_illegalArgument() throws Exception {
@@ -108,7 +108,7 @@ public class ProductControllerTest {
     }
 
     // 更新商品
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     @Transactional
     @Test
     public void updateProduct_success() throws Exception {
@@ -138,7 +138,7 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.lastModifiedDate", notNullValue()));
     }
 
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     @Transactional
     @Test
     public void updateProduct_illegalArgument() throws Exception {
@@ -157,7 +157,7 @@ public class ProductControllerTest {
 
     }
 
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     @Transactional
     @Test
     public void updateProduct_productNotFound() throws Exception {
@@ -180,7 +180,7 @@ public class ProductControllerTest {
     }
 
     // 刪除商品
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     @Transactional
     @Test
     public void deleteProduct_success() throws Exception {
@@ -191,7 +191,7 @@ public class ProductControllerTest {
                 .andExpect(status().is(204));
     }
 
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     @Transactional
     @Test
     public void deleteProduct_deleteNonExistingProduct() throws Exception {
