@@ -12,3 +12,9 @@ mybatis:
   mapper-locations: classpath:mappers/*.xml
   configuration:
     map-underscore-to-camel-case: true
+app:
+  order:
+    clientBackUrl: http://localhost:8080
+    returnUrl: http://localhost:8080
+  security:
+    secret-key: 397A24432646294A404E635166546A576E5A7234753778214125442A472D4B61
