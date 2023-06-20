@@ -14,4 +14,6 @@ public interface OrderService {
     List<Order> getOrders(OrderQueryParams orderQueryParams);
 
     Integer countOrder(OrderQueryParams orderQueryParams);
+
+    String checkout(Integer userId, Integer orderId);
 }

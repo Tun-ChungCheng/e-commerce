@@ -11,17 +11,22 @@ import com.iancheng.ecommerce.model.Order;
 import com.iancheng.ecommerce.model.OrderItem;
 import com.iancheng.ecommerce.model.Product;
 import com.iancheng.ecommerce.service.OrderService;
+import ecpay.payment.integration.AllInOne;
+import ecpay.payment.integration.domain.AioCheckOutALL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -30,12 +35,20 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemMapper orderItemMapper;
     private final ProductMapper productMapper;
     private final UserMapper userMapper;
+    private final AllInOne allInOne;
+
+    @Value("${app.order.clientBackUrl}")
+    private String CLIENT_BACK_URL;
+
+    @Value("${app.order.returnUrl}")
+    private String RETURN_URL;
 
     public OrderServiceImpl(OrderMapper orderMapper, OrderItemMapper orderItemMapper, ProductMapper productMapper, UserMapper userMapper) {
         this.orderMapper = orderMapper;
         this.orderItemMapper = orderItemMapper;
         this.productMapper = productMapper;
         this.userMapper = userMapper;
+        this.allInOne = new AllInOne("");
     }
 
     @Override
@@ -101,6 +114,40 @@ public class OrderServiceImpl implements OrderService {
         orderItemMapper.createOrderItems(order.getOrderId(), orderItemList);
 
         return order.getOrderId();
+    }
+
+    @Transactional
+    @Override
+    public String checkout(Integer userId, Integer orderId) {
+        // 檢查 user 是否存在
+        checkUser(userId);
+
+        Order order = getOrderById(orderId);
+
+        StringBuilder orderItemDetail = new StringBuilder();
+        for (OrderItem orderItem : order.getOrderItemList()) {
+            orderItemDetail.append('[');
+            orderItemDetail.append(orderItem.getProductName());
+            orderItemDetail.append(" * ");
+            orderItemDetail.append(orderItem.getQuantity());
+            orderItemDetail.append(" = $NT");
+            orderItemDetail.append(orderItem.getAmount());
+            orderItemDetail.append(']');
+        }
+
+        AioCheckOutALL aioCheckOutALL = new AioCheckOutALL();
+        aioCheckOutALL.setMerchantTradeNo(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20));
+        aioCheckOutALL.setMerchantTradeDate(new SimpleDateFormat("yyyy/MM/dd hh:mm:ss").format(new Date()));
+        aioCheckOutALL.setTotalAmount(order.getTotalAmount().toString());
+        aioCheckOutALL.setTradeDesc(orderItemDetail.toString());
+        aioCheckOutALL.setItemName(orderItemDetail.toString());
+        aioCheckOutALL.setNeedExtraPaidInfo("N");
+        aioCheckOutALL.setClientBackURL(CLIENT_BACK_URL);
+        aioCheckOutALL.setReturnURL(RETURN_URL);
+
+        String checkoutForm = allInOne.aioCheckOut(aioCheckOutALL, null);
+
+        return checkoutForm;
     }
 
     @Override

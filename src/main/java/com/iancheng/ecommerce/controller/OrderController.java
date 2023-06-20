@@ -62,4 +62,14 @@ public class OrderController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
+
+    @PostMapping("/users/{userId}/orders/{orderId}")
+    public ResponseEntity<String> checkout(
+            @PathVariable Integer userId,
+            @PathVariable Integer orderId
+    ) {
+        String checkoutForm = orderService.checkout(userId, orderId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(checkoutForm);
+    }
 }

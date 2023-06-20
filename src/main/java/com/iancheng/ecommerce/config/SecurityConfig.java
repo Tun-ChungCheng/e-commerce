@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.DELETE, "/products/*").hasAuthority(Role.ADMIN.name())
                 .antMatchers(HttpMethod.GET,    "/users/*/orders").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
                 .antMatchers(HttpMethod.POST,   "/users/*/orders").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                .antMatchers(HttpMethod.POST,   "/users/*/orders/*").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
                 .anyRequest().authenticated()
                 .and()
             .sessionManagement()
