@@ -3,13 +3,11 @@ package com.iancheng.ecommerce.service.impl;
 import com.iancheng.ecommerce.dto.BuyItem;
 import com.iancheng.ecommerce.dto.CreateOrderRequest;
 import com.iancheng.ecommerce.dto.OrderQueryParams;
-import com.iancheng.ecommerce.mapper.OrderItemMapper;
-import com.iancheng.ecommerce.mapper.OrderMapper;
-import com.iancheng.ecommerce.mapper.ProductMapper;
-import com.iancheng.ecommerce.mapper.UserMapper;
+import com.iancheng.ecommerce.mapper.*;
 import com.iancheng.ecommerce.model.Order;
 import com.iancheng.ecommerce.model.OrderItem;
 import com.iancheng.ecommerce.model.Product;
+import com.iancheng.ecommerce.model.Trade;
 import com.iancheng.ecommerce.service.OrderService;
 import ecpay.payment.integration.AllInOne;
 import ecpay.payment.integration.domain.AioCheckOutALL;
@@ -19,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
@@ -35,6 +34,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemMapper orderItemMapper;
     private final ProductMapper productMapper;
     private final UserMapper userMapper;
+    private final TradeMapper tradeMapper;
     private final AllInOne allInOne;
 
     @Value("${app.order.clientBackUrl}")
@@ -43,11 +43,17 @@ public class OrderServiceImpl implements OrderService {
     @Value("${app.order.returnUrl}")
     private String RETURN_URL;
 
-    public OrderServiceImpl(OrderMapper orderMapper, OrderItemMapper orderItemMapper, ProductMapper productMapper, UserMapper userMapper) {
+    public OrderServiceImpl(
+            OrderMapper orderMapper,
+            OrderItemMapper orderItemMapper,
+            ProductMapper productMapper,
+            UserMapper userMapper,
+            TradeMapper tradeMapper) {
         this.orderMapper = orderMapper;
         this.orderItemMapper = orderItemMapper;
         this.productMapper = productMapper;
         this.userMapper = userMapper;
+        this.tradeMapper = tradeMapper;
         this.allInOne = new AllInOne("");
     }
 
@@ -101,6 +107,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         Order order = new Order();
+        order.setMerchantTradeNo(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20));
         order.setUserId(userId);
         order.setTotalAmount(totalAmount);
 
@@ -122,25 +129,33 @@ public class OrderServiceImpl implements OrderService {
         // 檢查 user 是否存在
         checkUser(userId);
 
+        // 檢查 order 是否存在
+        checkOrder(orderId);
+
+        // 檢查 order 是否屬於此 user
+        checkOrderUser(userId, orderId);
+
         Order order = getOrderById(orderId);
 
-        StringBuilder orderItemDetail = new StringBuilder();
+        // 產生訂單細節
+        StringBuilder merchandiseDetail = new StringBuilder();
         for (OrderItem orderItem : order.getOrderItemList()) {
-            orderItemDetail.append('[');
-            orderItemDetail.append(orderItem.getProductName());
-            orderItemDetail.append(" * ");
-            orderItemDetail.append(orderItem.getQuantity());
-            orderItemDetail.append(" = $NT");
-            orderItemDetail.append(orderItem.getAmount());
-            orderItemDetail.append(']');
+            merchandiseDetail.append("#『").
+                        append(orderItem.getProductName()).
+                        append(" * ").
+                        append(orderItem.getQuantity()).
+                        append(" = $NT").
+                        append(orderItem.getAmount()).
+                        append("』");
         }
 
+        // 呼叫 ECPay API 建立結帳頁面
         AioCheckOutALL aioCheckOutALL = new AioCheckOutALL();
-        aioCheckOutALL.setMerchantTradeNo(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20));
+        aioCheckOutALL.setMerchantTradeNo(order.getMerchantTradeNo());
         aioCheckOutALL.setMerchantTradeDate(new SimpleDateFormat("yyyy/MM/dd hh:mm:ss").format(new Date()));
         aioCheckOutALL.setTotalAmount(order.getTotalAmount().toString());
-        aioCheckOutALL.setTradeDesc(orderItemDetail.toString());
-        aioCheckOutALL.setItemName(orderItemDetail.toString());
+        aioCheckOutALL.setTradeDesc(merchandiseDetail.toString());
+        aioCheckOutALL.setItemName(merchandiseDetail.toString());
         aioCheckOutALL.setNeedExtraPaidInfo("N");
         aioCheckOutALL.setClientBackURL(CLIENT_BACK_URL);
         aioCheckOutALL.setReturnURL(RETURN_URL);
@@ -148,6 +163,33 @@ public class OrderServiceImpl implements OrderService {
         String checkoutForm = allInOne.aioCheckOut(aioCheckOutALL, null);
 
         return checkoutForm;
+    }
+
+    @Override
+    public void callback(MultiValueMap<String, String> formData) {
+        formData.forEach((key, value) -> System.out.println(key + " : " + value.get(0)));
+
+        // 保存交易紀錄
+        Trade trade = new Trade();
+        trade.setCustomField1(formData.get("CustomField1").get(0));
+        trade.setCustomField1(formData.get("CustomField2").get(0));
+        trade.setCustomField1(formData.get("CustomField3").get(0));
+        trade.setCustomField1(formData.get("CustomField4").get(0));
+        trade.setMerchantId(formData.get("MerchantID").get(0));
+        trade.setMerchantTradeNo(formData.get("MerchantTradeNo").get(0));
+        trade.setPaymentDate(formData.get("PaymentDate").get(0));
+        trade.setPaymentType(formData.get("PaymentType").get(0));
+        trade.setPaymentTypeChargeFee(formData.get("PaymentTypeChargeFee").get(0));
+        trade.setRtnCode(formData.get("RtnCode").get(0));
+        trade.setRtnMsg(formData.get("RtnMsg").get(0));
+        trade.setSimulatePaid(formData.get("SimulatePaid").get(0));
+        trade.setStoreId(formData.get("StoreID").get(0));
+        trade.setTradeAmt(formData.get("TradeAmt").get(0));
+        trade.setTradeDate(formData.get("TradeDate").get(0));
+        trade.setTradeNo(formData.get("TradeNo").get(0));
+        trade.setCheckMacValue(formData.get("CheckMacValue").get(0));
+
+        tradeMapper.saveTrade(trade);
     }
 
     @Override
@@ -173,14 +215,43 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void checkProduct(Product product, BuyItem buyItem) {
-        if (product == null) {
+        if (!productExist(product)) {
             log.warn("商品 {} 不存在", buyItem.getProductId());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        } else if (product.getStock() < buyItem.getQuantity()) {
+        } else if (!productEnough(product, buyItem)) {
             log.warn("商品 {} 庫存數量不足，無法購買。剩餘庫存 {}，欲購買數量 {}",
                     buyItem.getProductId(), product.getStock(), buyItem.getQuantity());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
 
+    private boolean productExist(Product product) {
+        return product != null;
+    }
+
+    private boolean productEnough(Product product, BuyItem buyItem) {
+        return product.getStock() >= buyItem.getQuantity();
+    }
+
+    private void checkOrder(Integer orderId) {
+        if (!orderExist(orderId)) {
+            log.warn("訂單 {} 不存在", orderId);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private boolean orderExist(Integer orderId) {
+        return orderMapper.getOrderById(orderId) != null;
+    }
+
+    private void checkOrderUser(Integer userId, Integer orderId) {
+        if (!userId.equals(getUserIdByOrderId(orderId))) {
+            log.warn("訂單 {} 不屬於 userId {}", orderId, userId);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private Integer getUserIdByOrderId(Integer orderId) {
+        return orderMapper.getUserIdByOrderId(orderId);
+    }
 }

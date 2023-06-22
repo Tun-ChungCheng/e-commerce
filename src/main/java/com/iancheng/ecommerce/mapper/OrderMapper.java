@@ -15,4 +15,6 @@ public interface OrderMapper {
     void createOrder(Order order);
 
     Order getOrderById(Integer orderId);
+
+    Integer getUserIdByOrderId(Integer orderId);
 }

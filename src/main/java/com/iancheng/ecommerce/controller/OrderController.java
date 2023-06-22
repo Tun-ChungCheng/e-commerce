@@ -7,6 +7,7 @@ import com.iancheng.ecommerce.service.OrderService;
 import com.iancheng.ecommerce.util.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,5 +72,10 @@ public class OrderController {
         String checkoutForm = orderService.checkout(userId, orderId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(checkoutForm);
+    }
+
+    @PostMapping("/callback")
+    public void callback(@RequestBody MultiValueMap<String, String> formData) {
+        orderService.callback(formData);
     }
 }

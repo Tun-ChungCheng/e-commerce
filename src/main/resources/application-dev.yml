@@ -16,7 +16,7 @@ mybatis:
     map-underscore-to-camel-case: true
 app:
   order:
-    clientBackUrl: http://localhost:8080
-    returnUrl: http://localhost:8080
+    clientBackUrl: http://localhost:8080/products
+    returnUrl: https://7111-220-133-92-216.ngrok-free.app/callback
   security:
     secret-key: 397A24432646294A404E635166546A576E5A7234753778214125442A472D4B61

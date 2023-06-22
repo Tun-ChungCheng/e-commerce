@@ -186,7 +186,9 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.results[1].totalAmount", equalTo(500690)))
                 .andExpect(jsonPath("$.results[1].orderItemList", hasSize(3)))
                 .andExpect(jsonPath("$.results[1].createdDate", notNullValue()))
-                .andExpect(jsonPath("$.results[1].lastModifiedDate", notNullValue()));
+                .andExpect(jsonPath("$.results[1].lastModifiedDate", notNullValue()))
+                .andExpect(jsonPath("$.results[1].merchantTradeNo", notNullValue()));
+
     }
 
     @WithMockUser(authorities = {"MEMBER"})

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iancheng.ecommerce.mapper.TradeMapper">
+    <!--    void saveTrade(Trade trade)    -->
+    <insert id="saveTrade">
+        INSERT INTO trade (merchant_id, merchant_trade_no ,store_id,
+                           rtn_code, rtn_msg, trade_no,
+                           trade_amt, payment_date, payment_type,
+                           payment_type_charge_fee, trade_date, simulate_paid,
+                           custom_field1, custom_field2, custom_field3,
+                           custom_field4, check_mac_value)
+        VALUES (#{merchantId}, #{merchantTradeNo}, #{storeId},
+                #{rtnCode}, #{rtnMsg}, #{tradeNo},
+                #{tradeAmt}, #{paymentDate}, #{paymentType},
+                #{paymentTypeChargeFee}, #{tradeDate}, #{simulatePaid},
+                #{customField1}, #{customField2}, #{customField3},
+                #{customField4}, #{checkMacValue})
+    </insert>
+</mapper>

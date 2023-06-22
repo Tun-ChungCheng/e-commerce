@@ -6,7 +6,7 @@
     <!--    List<Order> getOrders(OrderQueryParams orderQueryParams)    -->
     <select id="getOrders" resultType="com.iancheng.ecommerce.model.Order">
         SELECT order_id, user_id, total_amount,
-               created_date, last_modified_date
+               created_date, last_modified_date, merchant_trade_no
           FROM `order`
          WHERE user_id = #{userId}
          ORDER BY created_date DESC
@@ -23,17 +23,23 @@
     <!--    void createOrder(Order order)    -->
     <insert id="createOrder" useGeneratedKeys="true" keyProperty="orderId">
         INSERT INTO `order` (user_id, total_amount, created_date,
-                             last_modified_date)
+                             last_modified_date, merchant_trade_no)
         VALUES (#{userId}, #{totalAmount}, #{createdDate},
-                #{lastModifiedDate})
+                #{lastModifiedDate}, #{merchantTradeNo})
     </insert>
 
     <!--    Order getOrderById(Integer orderId)    -->
     <select id="getOrderById" resultType="com.iancheng.ecommerce.model.Order">
         SELECT order_id, user_id, total_amount,
-               created_date, last_modified_date
+               created_date, last_modified_date, merchant_trade_no
           FROM `order`
          WHERE order_id = #{orderId}
     </select>
 
+    <!--    Integer getUserIdByOrderId(Integer orderId)    -->
+    <select id="getUserIdByOrderId" resultType="Integer">
+        SELECT user_id
+          FROM `order`
+         WHERE order_id = #{orderId}
+    </select>
 </mapper>

@@ -23,11 +23,12 @@ CREATE TABLE IF NOT EXISTS `user`
 
 CREATE TABLE IF NOT EXISTS `order`
 (
-    order_id           INT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    user_id            INT       NOT NULL,
-    total_amount       DECIMAL   NOT NULL, -- 訂單總花費
-    created_date       TIMESTAMP NOT NULL,
-    last_modified_date TIMESTAMP NOT NULL
+    order_id           INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    user_id            INT          NOT NULL,
+    merchant_trade_no  VARCHAR(20)  NOT NULL UNIQUE,
+    total_amount       DECIMAL      NOT NULL, -- 訂單總花費
+    created_date       TIMESTAMP    NOT NULL,
+    last_modified_date TIMESTAMP    NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS order_item
@@ -47,4 +48,26 @@ CREATE TABLE IF NOT EXISTS token
     expired    BOOLEAN      NOT NULL,
     revoked    BOOLEAN      NOT NULL,
     user_id    INT          NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS trade
+(
+    trade_id                 INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    merchant_id              VARCHAR(10)  NOT NULL,
+    merchant_trade_no        VARCHAR(20)  NOT NULL UNIQUE,
+    store_id                 VARCHAR(20),
+    rtn_code                 INT          NOT NULL,
+    rtn_msg                  VARCHAR(200) NOT NULL,
+    trade_no                 VARCHAR(20)  NOT NULL UNIQUE,
+    trade_amt                INT          NOT NULL,
+    payment_date             VARCHAR(20)  NOT NULL,
+    payment_type             VARCHAR(20)  NOT NULL,
+    payment_type_charge_fee  INT,
+    trade_date               VARCHAR(20)  NOT NULL,
+    simulate_paid            INT          NOT NULL,
+    custom_field1            VARCHAR(50),
+    custom_field2            VARCHAR(50),
+    custom_field3            VARCHAR(50),
+    custom_field4            VARCHAR(50),
+    check_mac_value          VARCHAR(64)  NOT NULL
 );

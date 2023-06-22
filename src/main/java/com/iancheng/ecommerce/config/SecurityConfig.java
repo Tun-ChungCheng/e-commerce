@@ -36,14 +36,16 @@ public class SecurityConfig {
         http
             .csrf().disable()
             .authorizeHttpRequests()
-                .antMatchers(HttpMethod.POST,   "/users/login", "/users/register").permitAll()
+                .antMatchers(HttpMethod.POST,   "/users/login",
+                                                "/users/register",
+                                                "/callback").permitAll()
                 .antMatchers(HttpMethod.GET,    "/products/**").permitAll()
-                .antMatchers(HttpMethod.POST,   "/products").hasAuthority  (Role.ADMIN.name())
-                .antMatchers(HttpMethod.PUT,    "/products/*").hasAuthority(Role.ADMIN.name())
-                .antMatchers(HttpMethod.DELETE, "/products/*").hasAuthority(Role.ADMIN.name())
-                .antMatchers(HttpMethod.GET,    "/users/*/orders").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
-                .antMatchers(HttpMethod.POST,   "/users/*/orders").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
-                .antMatchers(HttpMethod.POST,   "/users/*/orders/*").hasAnyAuthority(Role.MEMBER.name(), Role.ADMIN.name())
+                .antMatchers(HttpMethod.POST,   "/products").hasAuthority           (Role.ADMIN.name())
+                .antMatchers(HttpMethod.PUT,    "/products/*").hasAuthority         (Role.ADMIN.name())
+                .antMatchers(HttpMethod.DELETE, "/products/*").hasAuthority         (Role.ADMIN.name())
+                .antMatchers(HttpMethod.GET,    "/users/*/orders").hasAnyAuthority  (Role.ADMIN.name(), Role.MEMBER.name())
+                .antMatchers(HttpMethod.POST,   "/users/*/orders",
+                                                "/users/*/orders/*").hasAnyAuthority(Role.ADMIN.name(), Role.MEMBER.name())
                 .anyRequest().authenticated()
                 .and()
             .sessionManagement()

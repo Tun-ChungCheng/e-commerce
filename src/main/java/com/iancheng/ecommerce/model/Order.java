@@ -7,6 +7,7 @@ import java.util.List;
 public class Order {
     private Integer orderId;
     private Integer userId;
+    private String merchantTradeNo;
     private BigDecimal totalAmount;
     private Date createdDate;
     private Date lastModifiedDate;
@@ -26,6 +27,14 @@ public class Order {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getMerchantTradeNo() {
+        return merchantTradeNo;
+    }
+
+    public void setMerchantTradeNo(String merchantTradeNo) {
+        this.merchantTradeNo = merchantTradeNo;
     }
 
     public BigDecimal getTotalAmount() {
